@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>RekoMKP</title>
+        <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+        <script src="https://cdn.tailwindcss.com"></script>
+        <script defer src="https://unpkg.com/alpinejs@3.10.3/dist/cdn.min.js"></script>
+    </head>
+
+    <body>
+        <div class="container mt-4 mb-2 px-6 mx-auto" x-data="dataContent">
+            <section id="head" class="flex flex-col justify-center">
+                <h1 class="mx-auto text-3xl font-bold">
+                    RekoMKP</h1>
+                <p class="mx-auto text-center">
+                    Aplikasi untuk memprediksi mata kuliah pilihan yang sebaiknya dikontrak.</p>
+            </section>
+            <section id="alert" class="mt-4 mb-2 p-4 flex text-red-800 bg-red-200 border-px border-red-400 rounded-md"
+                role="alert" x-show="showError">
+                <i id="icon" class="mr-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
+                        <path fill-rule="evenodd"
+                            d="M9.401 3.003c1.155-2 4.043-2 5.197 0l7.355 12.748c1.154 2-.29 4.5-2.599 4.5H4.645c-2.309 0-3.752-2.5-2.598-4.5L9.4 3.003zM12 8.25a.75.75 0 01.75.75v3.75a.75.75 0 01-1.5 0V9a.75.75 0 01.75-.75zm0 8.25a.75.75 0 100-1.5.75.75 0 000 1.5z"
+                            clip-rule="evenodd" />
+                    </svg>
+                </i>
+                <div class="static">
+                    <p x-text="error.message"></p>
+                    <template x-if="error.type === 'incomplete-courses'">
+                        <ul>
+                            <template x-for="item in error.courses">
+                                <li class="list-disc list-inside" x-text="item"></li>
+                            </template>
+                        </ul>
+                    </template>
+                </div>
+                <button @click="resetError" class="ml-auto">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                        stroke="currentColor" class="w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </section>
+            <section id="input-screen" class="relative" :class="{ 'p-2': state === 'loading' }"
+                x-show="state === 'default' || state === 'loading'">
+                <p class="mx-auto mb-1 text-base text-slate-900">
+                    <strong>Cara menggunakan aplikasi:</strong> Unggah kartu hasil studi semester I sampai dengan
+                    semester VI Anda ke form yang tersedia. Untuk saat ini, kami hanya dapat menerima file dalam format
+                    pdf.
+                </p>
+                <form @submit.prevent="handleSubmit" class="grid gap-4">
+                    <fieldset class="grid gap-2 lg:grid-cols-3">
+                        <template x-for="_ in 6">
+                            <label x-id="['khs']" :for="$id('khs')"
+                                class="border-2 border-gray-200 p-3 w-full block rounded cursor-pointer"
+                                :class="{ 'bg-slate-300 text-slate-700': state === 'loading' }">
+                                <input type="file" :name="$id('khs')" :id="$id('khs')" class="sr-only"
+                                    accept="application/pdf" @change="files[$el.id] = $event.target.files[0]"
+                                    :disabled="state === 'loading'">
+                                <span x-text="filesString($id('khs'))"></span>
+                            </label>
+                        </template>
+                    </fieldset>
+                    <div class="grid lg:col-span-full lg:grid-cols-2 gap-2 lg:gap-4">
+                        <button type="submit"
+                            class="bg-blue-500 hover:bg-blue-700 border-2 border-blue-500 hover:border-blue-700 text-white font-bold py-2 px-4 rounded w-full"
+                            :class="{ 'opacity-65': state === 'loading' }" :disabled="state === 'loading'"
+                            x-ref="submitFiles" x-text="submitLabel"></button>
+                        <button type="reset"
+                            class="border-2 border-blue-500 hover:border-blue-700 text-blue-500 hover:text-blue-700 font-bold py-2 px-4 rounded w-full"
+                            :class="{ 'opacity-65': state === 'loading' }" @click="resetRecommendations"
+                            :disabled="state === 'loading'" x-ref="resetFiles" x-text="resetLabel"></button>
+                    </div>
+                </form>
+                <div id="loading-screen"
+                    class="absolute inset-0 opacity-80 border-2 border-slate-500 rounded bg-slate-50 w-full h-full flex flex-col z-20"
+                    x-show="state === 'loading'">
+                    <div id="loading-spinner" class="m-auto">
+                        <div id="spinner"
+                            class="flex items-center justify-center rounded-full w-14 h-14 bg-gradient-to-tr from-sky-600 to-lime-400 animate-spin mx-auto">
+                            <div class="h-9 w-9 rounded-full bg-white"></div>
+                        </div>
+                        <p class="mx-auto mb-1 text-base text-slate-900 text-center">
+                            <strong>Tunggu sebentar</strong>
+                        </p>
+                    </div>
+                </div>
+            </section>
+            <section id="result-screen" x-show="state === 'processed'">
+                <p class="">
+                    Berdasarkan hasil akademik Anda, urutan prioritas pemilihan mata kuliah pilihan untuk Anda sebagai
+                    berikut:
+                </p>
+                <ul class="grid gap-2 lg:grid-cols-3 my-2">
+                    <template x-for="item, index in recommendations">
+                        <li class="flex p-2 border-2 border-slate-300 rounded">
+                            <p class="font-medium" x-text="`${index + 1}. ${item}`"></p>
+                        </li>
+                    </template>
+                </ul>
+                <button
+                    class="bg-blue-500 hover:bg-blue-700 border-2 border-blue-500 hover:border-blue-700 text-white font-bold py-2 px-4 rounded lg:w-auto w-full"
+                    @click="resetRecommendations">Ulangi rekomendasi</button>
+            </section>
+            <section id="copywriting-content" class="my-3">
+                <div class="content">
+                    <h5 class="title"></h5>
+                    <p class="">content copywriting</p>
+                </div>
+            </section>
+            <section id="footer"></section>
+        </div>
+
+        <script>
+            function UserInputError(responseObject) {
+                this.name = "User Input Error";
+                this.response = responseObject;
+                this.stack = (new Error()).stack;
+            }
+            function UnidentifiedError(message) {
+                this.name = "Unidentified Error";
+                this.message = message;
+                this.stack = (new Error()).stack;
+            }
+            const dataContent = {
+                files: {},
+                state: "default",
+                recommendations: [],
+                showError: false,
+                error: {
+                    type: "",
+                    message: "",
+                    courses: []
+                },
+                get submitLabel() { return this.state === "loading" ? 'Sedang menyusun rekomendasi...' : 'Cek rekomendasi Mata Kuliah' },
+                get resetLabel() { return this.state === "loading" ? 'Sedang menyusun rekomendasi...' : 'Hapus semua file' },
+                resetRecommendations() {
+                    this.files = {};
+                    this.state = "default";
+                    this.recommendations = [];
+                    this.resetError();
+                },
+                resetError() {
+                    this.showError = false;
+                    this.error = {
+                        type: "",
+                        message: "",
+                        courses: []
+                    };
+                },
+                filesString(index) {
+                    return this.files && this.files[index] ? this.files[index].name : `KHS Semester ${index.split("-").pop()}`
+                },
+                handleSubmit() {
+                    this.resetError();
+                    const formData = new FormData();
+                    this.state = "loading";
+                    Object.keys(this.files).forEach(key => {
+                        formData.append(key, this.files[key], this.files[key].name)
+                    });
+                    fetch(
+                        "https://predictmk.azurewebsites.net/api/predict-mk",
+                        {
+                            method: "POST",
+                            body: formData
+                        }
+                    ).then(
+                        response => {
+                            this.state = "default";
+                            if (response.ok) {
+                                return response.json();
+                            }
+
+                            if (response.status >= 400 && response.status <= 499) {
+                                throw new UserInputError(response);
+                            }
+
+                            throw new UnidentifiedError("Error Unknown");
+                        },
+                    ).then(
+                        data => {
+                            this.recommendations = data.result;
+                            this.state = "processed";
+                        }
+                    ).catch(
+                        error => {
+                            baseMessage = "Mohon maaf, permohonan tidak dapat diproses.";
+                            if (error instanceof UserInputError) {
+                                errorContent = error.response.json();
+                                statusCode = error.response.status;
+                                errorType = errorContent.errorType;
+                                switch (statusCode) {
+                                    case 404:
+                                        this.error = {
+                                            type: errorType,
+                                            message: `${baseMessage} Layanan kami belum mencakup jurusan Anda.`
+                                        };
+                                        break;
+                                    case 454:
+                                        this.error = {
+                                            type: errorType,
+                                            message: `${baseMessage} Anda tidak memiliki nilai pada mata kuliah berikut:`,
+                                            courses: errorContent.missingItems
+                                        }
+                                        break;
+
+                                    default:
+                                        this.error = {
+                                            message: `${baseMessage} Terdapat galat pada aplikasi kami.`
+                                        };
+                                        break;
+                                }
+                            } else {
+                                this.error = {
+                                    message: `${baseMessage} Terdapat galat pada aplikasi kami.`
+                                };
+
+                            }
+                            this.state = "default";
+                            this.showError = !this.showError;
+                        }
+                    );
+                }
+            };
+        </script>
+    </body>
+
+</html>

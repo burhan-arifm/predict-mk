@@ -6,3 +6,5 @@ This repository contains two model files.
 2. `model_evaluation.py` for run multiple training and testing with ranged sequences and step sizes. also, this variant save the result in a specified folder called `eval_pool`.
 
 Both files generate the training result plot and save the model.
+
+You can see the frontend code at `index.html` file. The backend side is stored in another repository though.
