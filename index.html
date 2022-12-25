@@ -98,7 +98,7 @@
                 <ul class="grid gap-2 lg:grid-cols-3 my-2">
                     <template x-for="item, index in recommendations">
                         <li class="flex p-2 border-2 border-slate-300 rounded">
-                            <p class="font-medium" x-text="`${index + 1}. ${item}`"></p>
+                            <p class="font-semibold" x-text="`${index + 1}. ${item}`"></p>
                         </li>
                     </template>
                 </ul>
@@ -106,13 +106,95 @@
                     class="bg-blue-500 hover:bg-blue-700 border-2 border-blue-500 hover:border-blue-700 text-white font-bold py-2 px-4 rounded lg:w-auto w-full"
                     @click="resetRecommendations">Ulangi rekomendasi</button>
             </section>
-            <section id="copywriting-content" class="my-3">
-                <div class="content">
-                    <h5 class="title"></h5>
-                    <p class="">content copywriting</p>
+            <section id="copywriting-content" class="my-3 grid gap-1">
+                <div class="flex">
+                    <i class="mr-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
+                            <path
+                                d="M11.25 4.533A9.707 9.707 0 006 3a9.735 9.735 0 00-3.25.555.75.75 0 00-.5.707v14.25a.75.75 0 001 .707A8.237 8.237 0 016 18.75c1.995 0 3.823.707 5.25 1.886V4.533zM12.75 20.636A8.214 8.214 0 0118 18.75c.966 0 1.89.166 2.75.47a.75.75 0 001-.708V4.262a.75.75 0 00-.5-.707A9.735 9.735 0 0018 3a9.707 9.707 0 00-5.25 1.533v16.103z" />
+                        </svg>
+                    </i>
+                    <div class="static">
+                        <h5 class="font-semibold">Apa itu RekoMKP?</h5>
+                        <p class="">
+                            RekoMKP adalah aplikasi yang dapat memberikan rekomendasi mata kuliah pilihan yang
+                            sesuai dengan nilai mata kuliah yang telah diambil sebelumnya dengan bantuan teknologi AI
+                            (Artificial Intelligence).
+                        </p>
+                    </div>
+                </div>
+                <div class="flex">
+                    <i class="mr-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
+                            <path
+                                d="M11.25 4.533A9.707 9.707 0 006 3a9.735 9.735 0 00-3.25.555.75.75 0 00-.5.707v14.25a.75.75 0 001 .707A8.237 8.237 0 016 18.75c1.995 0 3.823.707 5.25 1.886V4.533zM12.75 20.636A8.214 8.214 0 0118 18.75c.966 0 1.89.166 2.75.47a.75.75 0 001-.708V4.262a.75.75 0 00-.5-.707A9.735 9.735 0 0018 3a9.707 9.707 0 00-5.25 1.533v16.103z" />
+                        </svg>
+                    </i>
+                    <div class="static">
+                        <h5 class="font-semibold">Bagaimana cara kerja aplikasi ini?</h5>
+                        <p class="">
+                            Aplikasi ini akan mengambil data nilai mata kuliah yang telah diambil sebelumnya dan
+                            menganalisisnya menggunakan algoritma AI. Kemudian, aplikasi akan memberikan rekomendasi
+                            mata kuliah yang sesuai dengan nilai tersebut.
+                        </p>
+                    </div>
+                </div>
+                <div class="flex">
+                    <i class="mr-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
+                            <path
+                                d="M11.25 4.533A9.707 9.707 0 006 3a9.735 9.735 0 00-3.25.555.75.75 0 00-.5.707v14.25a.75.75 0 001 .707A8.237 8.237 0 016 18.75c1.995 0 3.823.707 5.25 1.886V4.533zM12.75 20.636A8.214 8.214 0 0118 18.75c.966 0 1.89.166 2.75.47a.75.75 0 001-.708V4.262a.75.75 0 00-.5-.707A9.735 9.735 0 0018 3a9.707 9.707 0 00-5.25 1.533v16.103z" />
+                        </svg>
+                    </i>
+                    <div class="static">
+                        <h5 class="font-semibold">Apakah aplikasi ini hanya dapat digunakan oleh mahasiswa?</h5>
+                        <p class="">
+                            Tidak, aplikasi ini dapat digunakan oleh siapa saja yang ingin mengetahui rekomendasi mata
+                            kuliah yang sesuai dengan nilai yang telah diambil sebelumnya. Namun, aplikasi ini mungkin
+                            lebih berguna bagi mahasiswa yang sedang mencari mata kuliah yang sesuai dengan minat dan
+                            kemampuan mereka.
+                        </p>
+                    </div>
+                </div>
+                <div class="flex">
+                    <i class="mr-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
+                            <path
+                                d="M11.25 4.533A9.707 9.707 0 006 3a9.735 9.735 0 00-3.25.555.75.75 0 00-.5.707v14.25a.75.75 0 001 .707A8.237 8.237 0 016 18.75c1.995 0 3.823.707 5.25 1.886V4.533zM12.75 20.636A8.214 8.214 0 0118 18.75c.966 0 1.89.166 2.75.47a.75.75 0 001-.708V4.262a.75.75 0 00-.5-.707A9.735 9.735 0 0018 3a9.707 9.707 0 00-5.25 1.533v16.103z" />
+                        </svg>
+                    </i>
+                    <div class="static">
+                        <h5 class="font-semibold">Apakah rekomendasi yang diberikan oleh aplikasi ini selalu akurat?
+                        </h5>
+                        <p class="">
+                            Aplikasi ini menggunakan teknologi AI yang sudah terbukti efektif, namun tidak selalu 100%
+                            akurat. Rekomendasi yang diberikan oleh aplikasi ini merupakan rekomendasi yang dapat
+                            memberikan kemungkinan terbaik bagi pengguna, namun masih perlu dilakukan verifikasi
+                            terlebih dahulu dengan dosen atau pihak yang berwenang sebelum memutuskan untuk mengambil
+                            mata kuliah tersebut.
+                        </p>
+                    </div>
+                </div>
+                <div class="flex">
+                    <i class="mr-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
+                            <path
+                                d="M11.25 4.533A9.707 9.707 0 006 3a9.735 9.735 0 00-3.25.555.75.75 0 00-.5.707v14.25a.75.75 0 001 .707A8.237 8.237 0 016 18.75c1.995 0 3.823.707 5.25 1.886V4.533zM12.75 20.636A8.214 8.214 0 0118 18.75c.966 0 1.89.166 2.75.47a.75.75 0 001-.708V4.262a.75.75 0 00-.5-.707A9.735 9.735 0 0018 3a9.707 9.707 0 00-5.25 1.533v16.103z" />
+                        </svg>
+                    </i>
+                    <div class="static">
+                        <h5 class="font-semibold">Bagaimana cara menggunakan aplikasi ini?</h5>
+                        <p class="">
+                            Untuk menggunakan aplikasi ini, pengguna cukup memasukkan data nilai mata kuliah yang telah
+                            diambil sebelumnya. Kemudian, aplikasi akan memberikan rekomendasi mata kuliah pilihan yang
+                            sesuai dengan nilai tersebut.
+                        </p>
+                    </div>
                 </div>
             </section>
-            <section id="footer"></section>
+            <section id="footer">
+                <p class="text-center">&copy;<span x-text="year"></span></p>
+            </section>
         </div>
 
         <script>
@@ -127,6 +209,7 @@
                 this.stack = (new Error()).stack;
             }
             const dataContent = {
+                year: new Date().getFullYear(),
                 files: {},
                 state: "default",
                 recommendations: [],
